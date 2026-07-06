@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsere Verlobung 💍</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cairo:wght@400;600;700&family=Amiri&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Startbildschirm: gemeinsamen Plan-Code eingeben (nur im Firebase-Modus) -->
+  <div id="code-screen" class="code-screen hidden">
+    <div class="code-card">
+      <div class="code-ornament">💍</div>
+      <h1 class="script-font">Unsere Verlobung</h1>
+      <p>Gebt hier euren <strong>gemeinsamen Plan-Code</strong> ein.<br>
+         Ihr beide müsst denselben Code verwenden, um dieselben Daten zu sehen –
+         z.&nbsp;B. <em>ghayth-und-ich-2026</em>.</p>
+      <input type="text" id="code-input" dir="auto" placeholder="euer-gemeinsamer-code" autocomplete="off">
+      <button id="code-join" class="btn btn-primary">Plan öffnen 💕</button>
+      <p class="code-hint">Merkt euch den Code gut – er ist euer Schlüssel zu euren Daten.</p>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+
+    <!-- Hinweis, solange Firebase noch nicht eingerichtet ist -->
+    <div id="local-banner" class="banner hidden">
+      ⚠️ Firebase ist noch nicht eingerichtet – die Daten werden nur <strong>in diesem Browser</strong> gespeichert.
+      Für gemeinsamen Zugriff bitte die Schritte in <strong>ANLEITUNG.md</strong> befolgen.
+    </div>
+
+    <header class="header">
+      <div class="header-inner">
+        <div class="ornament">✦ ✧ ✦</div>
+        <h1 class="script-font">Unsere Verlobung 💍</h1>
+        <div id="sync-status" class="sync-status" title="Speicherstatus"></div>
+
+        <div id="countdown" class="countdown hidden">
+          <div class="count-box"><span id="cd-days">0</span><label>Tage</label></div>
+          <div class="count-box"><span id="cd-hours">0</span><label>Std.</label></div>
+          <div class="count-box"><span id="cd-mins">0</span><label>Min.</label></div>
+          <div class="count-box"><span id="cd-secs">0</span><label>Sek.</label></div>
+        </div>
+        <p id="countdown-hint" class="countdown-hint">Legt unter „⏳ Termine“ euer Verlobungsdatum fest, um den Countdown zu starten.</p>
+        <p id="countdown-done" class="countdown-done hidden">🎉 Der große Tag ist da – alles Gute zur Verlobung! 🎉</p>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="todos">✅ Aufgaben</button>
+      <button class="tab" data-tab="guests">👥 Gäste</button>
+      <button class="tab" data-tab="budget">💰 Budget</button>
+      <button class="tab" data-tab="dates">⏳ Termine</button>
+      <button class="tab" data-tab="notes">📝 Notizen</button>
+    </nav>
+
+    <main>
+
+      <!-- ===== To-do-Liste ===== -->
+      <section id="tab-todos" class="tab-panel active">
+        <h2>To-do-Liste</h2>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div id="todo-progress" class="progress-fill"></div></div>
+          <span id="todo-progress-text" class="progress-text"></span>
+        </div>
+        <form id="todo-form" class="add-form">
+          <input type="text" id="todo-input" dir="auto" placeholder="Neue Aufgabe … / مهمة جديدة …" required>
+          <select id="todo-category">
+            <option value="">Allgemein</option>
+            <option>Location</option>
+            <option>Essen &amp; Getränke</option>
+            <option>Deko</option>
+            <option>Kleidung</option>
+            <option>Musik</option>
+            <option>Einladungen</option>
+            <option>Fotos</option>
+          </select>
+          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+        </form>
+        <ul id="todo-list" class="item-list"></ul>
+        <p id="todo-empty" class="empty-hint">Noch keine Aufgaben – fügt eure erste Aufgabe hinzu! 🌸</p>
+      </section>
+
+      <!-- ===== Gästeliste ===== -->
+      <section id="tab-guests" class="tab-panel">
+        <h2>Gästeliste</h2>
+        <div id="guest-summary" class="summary-cards"></div>
+        <form id="guest-form" class="add-form">
+          <input type="text" id="guest-name" dir="auto" placeholder="Name des Gastes … / اسم الضيف …" required>
+          <input type="number" id="guest-persons" min="1" max="99" value="1" title="Anzahl Personen">
+          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+        </form>
+        <ul id="guest-list" class="item-list"></ul>
+        <p id="guest-empty" class="empty-hint">Noch keine Gäste eingetragen. 💌</p>
+      </section>
+
+      <!-- ===== Budget ===== -->
+      <section id="tab-budget" class="tab-panel">
+        <h2>Budget-Planer</h2>
+        <div id="budget-summary" class="summary-cards"></div>
+        <form id="budget-form" class="add-form">
+          <input type="text" id="budget-category" dir="auto" placeholder="Posten (z. B. Location) …" required>
+          <input type="number" id="budget-planned" min="0" step="0.01" placeholder="Geplant €" required>
+          <input type="number" id="budget-actual" min="0" step="0.01" placeholder="Tatsächlich €">
+          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+        </form>
+        <div class="table-wrap">
+          <table id="budget-table" class="budget-table hidden">
+            <thead>
+              <tr><th>Posten</th><th>Geplant</th><th>Tatsächlich</th><th>Differenz</th><th></th></tr>
+            </thead>
+            <tbody id="budget-body"></tbody>
+            <tfoot id="budget-foot"></tfoot>
+          </table>
+        </div>
+        <p id="budget-empty" class="empty-hint">Noch keine Budget-Posten. 💐</p>
+      </section>
+
+      <!-- ===== Countdown & Termine ===== -->
+      <section id="tab-dates" class="tab-panel">
+        <h2>Countdown &amp; Termine</h2>
+        <div class="event-date-card">
+          <label for="event-date">💍 Unser Verlobungsdatum:</label>
+          <input type="datetime-local" id="event-date">
+        </div>
+        <h3>Wichtige Termine</h3>
+        <form id="date-form" class="add-form">
+          <input type="text" id="date-title" dir="auto" placeholder="Termin (z. B. Ringe anprobieren) …" required>
+          <input type="date" id="date-when" required>
+          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+        </form>
+        <ul id="date-list" class="item-list"></ul>
+        <p id="date-empty" class="empty-hint">Noch keine Termine geplant. 🗓️</p>
+      </section>
+
+      <!-- ===== Notizen & Ideen ===== -->
+      <section id="tab-notes" class="tab-panel">
+        <h2>Notizen &amp; Ideen</h2>
+        <form id="note-form" class="add-form add-form-column">
+          <input type="text" id="note-title" dir="auto" placeholder="Titel … / العنوان …" required>
+          <textarea id="note-text" dir="auto" rows="3" placeholder="Ideen, Links, Musikwünsche … / أفكار وملاحظات …"></textarea>
+          <button type="submit" class="btn btn-primary">+ Notiz speichern</button>
+        </form>
+        <div id="note-list" class="note-grid"></div>
+        <p id="note-empty" class="empty-hint">Noch keine Notizen – haltet eure Ideen fest! ✨</p>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      Mit 💕 geplant · <span id="plan-code-label"></span>
+    </footer>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
