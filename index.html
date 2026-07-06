@@ -158,6 +158,9 @@
   </div>
 
   <script src="firebase-config.js"></script>
-  <script type="module" src="app.js"></script>
+  <!-- Bewusst KEIN type="module": Module werden beim direkten Öffnen
+       per file:// vom Browser blockiert. Firebase wird bei Bedarf per
+       dynamischem import() geladen, das auch hier funktioniert. -->
+  <script src="app.js"></script>
 </body>
 </html>
