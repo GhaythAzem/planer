@@ -1,0 +1,14 @@
+{
+  "name": "Our Engagement Planner",
+  "short_name": "Engagement",
+  "description": "Shared planner for our engagement – tasks, guests, budget, dates and notes.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f1e9",
+  "theme_color": "#ece6d9",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -136,6 +136,16 @@ anderen **sofort** (Echtzeit-Synchronisation). ✨
 
 ---
 
+## Auf dem Handy wie eine App nutzen 📱
+
+Der Planer ist für das Handy optimiert. Wenn die Seite über GitHub Pages
+läuft, könnt ihr sie beide auf den Startbildschirm legen – dann öffnet sie
+sich wie eine richtige App (mit eigenem Icon, ohne Browserleiste):
+
+- **iPhone (Safari):** Seite öffnen → Teilen-Symbol → **„Zum Home-Bildschirm“**
+- **Android (Chrome):** Seite öffnen → Menü ⋮ → **„App installieren“**
+  bzw. „Zum Startbildschirm hinzufügen“
+
 ## Funktionen im Überblick
 
 | Bereich | Was ihr dort macht |

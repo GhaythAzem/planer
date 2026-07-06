@@ -19,6 +19,15 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+button, input, select, textarea, .tab {
+  touch-action: manipulation;           /* kein Doppeltipp-Zoom auf Bedienelementen */
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, select, textarea {
+  font-size: 1rem !important;           /* min. 16px, sonst zoomt iOS beim Fokussieren */
+}
+
 body {
   font-family: 'Cairo', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
   background: var(--bg);
@@ -467,5 +476,27 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   .add-form input[type="number"] { width: 90px; }
   .count-box { min-width: 64px; padding: 8px; }
   .count-box span { font-size: 1.5rem; }
-  .tab { padding: 8px 12px; font-size: 0.85rem; }
+
+  /* Tabs: eine wischbare Zeile statt Umbruch – wirkt wie eine App */
+  .tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex-shrink: 0; }
+
+  /* Große Touch-Flächen (Empfehlung: min. 44px) */
+  .tab, .btn, .status-btn { min-height: 44px; }
+  .btn-icon { min-height: 44px; min-width: 44px; font-size: 1.15rem; }
+  .item-list input[type="checkbox"] { width: 24px; height: 24px; }
+  .item-list li { padding: 10px 12px; gap: 8px; }
+
+  /* Formulare: volle Breite, große Felder */
+  .add-form input, .add-form select, .add-form .btn { min-height: 46px; }
+
+  .footer { padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
 }
