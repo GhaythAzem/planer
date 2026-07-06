@@ -1,159 +1,159 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unsere Verlobung 💍</title>
+  <title>Our Engagement 💍</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cairo:wght@400;600;700&family=Amiri&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Cairo:wght@400;600;700&family=Amiri&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Startbildschirm: gemeinsamen Plan-Code eingeben (nur im Firebase-Modus) -->
+  <!-- Start screen: enter the shared plan code (Firebase mode only) -->
   <div id="code-screen" class="code-screen hidden">
     <div class="code-card">
       <div class="code-ornament">💍</div>
-      <h1 class="script-font">Unsere Verlobung</h1>
-      <p>Gebt hier euren <strong>gemeinsamen Plan-Code</strong> ein.<br>
-         Ihr beide müsst denselben Code verwenden, um dieselben Daten zu sehen –
-         z.&nbsp;B. <em>ghayth-und-ich-2026</em>.</p>
-      <input type="text" id="code-input" dir="auto" placeholder="euer-gemeinsamer-code" autocomplete="off">
-      <button id="code-join" class="btn btn-primary">Plan öffnen 💕</button>
-      <p class="code-hint">Merkt euch den Code gut – er ist euer Schlüssel zu euren Daten.</p>
+      <h1 class="script-font">Our Engagement</h1>
+      <p>Enter your <strong>shared plan code</strong>.<br>
+         You both need to use the same code to see the same data –
+         e.g. <em>ghayth-and-me-2026</em>.</p>
+      <input type="text" id="code-input" dir="auto" placeholder="your-shared-code" autocomplete="off">
+      <button id="code-join" class="btn btn-primary">Open our plan 💕</button>
+      <p class="code-hint">Remember this code – it is the key to your data.</p>
     </div>
   </div>
 
   <div id="app" class="hidden">
 
-    <!-- Hinweis, solange Firebase noch nicht eingerichtet ist -->
+    <!-- Notice shown while Firebase is not set up yet -->
     <div id="local-banner" class="banner hidden">
-      ⚠️ Firebase ist noch nicht eingerichtet – die Daten werden nur <strong>in diesem Browser</strong> gespeichert.
-      Für gemeinsamen Zugriff bitte die Schritte in <strong>ANLEITUNG.md</strong> befolgen.
+      ⚠️ Firebase is not set up yet – your data is only stored <strong>in this browser</strong>.
+      For shared access, please follow the steps in <strong>ANLEITUNG.md</strong>.
     </div>
 
     <header class="header">
       <div class="header-inner">
         <div class="ornament">✦ ✧ ✦</div>
-        <h1 class="script-font">Unsere Verlobung 💍</h1>
-        <div id="sync-status" class="sync-status" title="Speicherstatus"></div>
+        <h1 class="script-font">Our Engagement 💍</h1>
+        <div id="sync-status" class="sync-status" title="Storage status"></div>
 
         <div id="countdown" class="countdown hidden">
-          <div class="count-box"><span id="cd-days">0</span><label>Tage</label></div>
-          <div class="count-box"><span id="cd-hours">0</span><label>Std.</label></div>
-          <div class="count-box"><span id="cd-mins">0</span><label>Min.</label></div>
-          <div class="count-box"><span id="cd-secs">0</span><label>Sek.</label></div>
+          <div class="count-box"><span id="cd-days">0</span><label>Days</label></div>
+          <div class="count-box"><span id="cd-hours">0</span><label>Hours</label></div>
+          <div class="count-box"><span id="cd-mins">0</span><label>Min</label></div>
+          <div class="count-box"><span id="cd-secs">0</span><label>Sec</label></div>
         </div>
-        <p id="countdown-hint" class="countdown-hint">Legt unter „⏳ Termine“ euer Verlobungsdatum fest, um den Countdown zu starten.</p>
-        <p id="countdown-done" class="countdown-done hidden">🎉 Der große Tag ist da – alles Gute zur Verlobung! 🎉</p>
+        <p id="countdown-hint" class="countdown-hint">Set your engagement date under “⏳ Dates” to start the countdown.</p>
+        <p id="countdown-done" class="countdown-done hidden">🎉 The big day is here – happy engagement! 🎉</p>
       </div>
     </header>
 
     <nav class="tabs">
-      <button class="tab active" data-tab="todos">✅ Aufgaben</button>
-      <button class="tab" data-tab="guests">👥 Gäste</button>
+      <button class="tab active" data-tab="todos">✅ Tasks</button>
+      <button class="tab" data-tab="guests">👥 Guests</button>
       <button class="tab" data-tab="budget">💰 Budget</button>
-      <button class="tab" data-tab="dates">⏳ Termine</button>
-      <button class="tab" data-tab="notes">📝 Notizen</button>
+      <button class="tab" data-tab="dates">⏳ Dates</button>
+      <button class="tab" data-tab="notes">📝 Notes</button>
     </nav>
 
     <main>
 
-      <!-- ===== To-do-Liste ===== -->
+      <!-- ===== Tasks ===== -->
       <section id="tab-todos" class="tab-panel active">
-        <h2>To-do-Liste</h2>
+        <h2>To-do list</h2>
         <div class="progress-wrap">
           <div class="progress-bar"><div id="todo-progress" class="progress-fill"></div></div>
           <span id="todo-progress-text" class="progress-text"></span>
         </div>
         <form id="todo-form" class="add-form">
-          <input type="text" id="todo-input" dir="auto" placeholder="Neue Aufgabe … / مهمة جديدة …" required>
+          <input type="text" id="todo-input" dir="auto" placeholder="New task … / مهمة جديدة …" required>
           <select id="todo-category">
-            <option value="">Allgemein</option>
-            <option>Location</option>
-            <option>Essen &amp; Getränke</option>
-            <option>Deko</option>
-            <option>Kleidung</option>
-            <option>Musik</option>
-            <option>Einladungen</option>
-            <option>Fotos</option>
+            <option value="">General</option>
+            <option>Venue</option>
+            <option>Food &amp; Drinks</option>
+            <option>Decoration</option>
+            <option>Outfits</option>
+            <option>Music</option>
+            <option>Invitations</option>
+            <option>Photos</option>
           </select>
-          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+          <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
         <ul id="todo-list" class="item-list"></ul>
-        <p id="todo-empty" class="empty-hint">Noch keine Aufgaben – fügt eure erste Aufgabe hinzu! 🌸</p>
+        <p id="todo-empty" class="empty-hint">No tasks yet – add your first one! 🌸</p>
       </section>
 
-      <!-- ===== Gästeliste ===== -->
+      <!-- ===== Guest list ===== -->
       <section id="tab-guests" class="tab-panel">
-        <h2>Gästeliste</h2>
+        <h2>Guest list</h2>
         <div id="guest-summary" class="summary-cards"></div>
         <form id="guest-form" class="add-form">
-          <input type="text" id="guest-name" dir="auto" placeholder="Name des Gastes … / اسم الضيف …" required>
-          <input type="number" id="guest-persons" min="1" max="99" value="1" title="Anzahl Personen">
-          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+          <input type="text" id="guest-name" dir="auto" placeholder="Guest name … / اسم الضيف …" required>
+          <input type="number" id="guest-persons" min="1" max="99" value="1" title="Number of people">
+          <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
         <ul id="guest-list" class="item-list"></ul>
-        <p id="guest-empty" class="empty-hint">Noch keine Gäste eingetragen. 💌</p>
+        <p id="guest-empty" class="empty-hint">No guests added yet. 💌</p>
       </section>
 
       <!-- ===== Budget ===== -->
       <section id="tab-budget" class="tab-panel">
-        <h2>Budget-Planer</h2>
+        <h2>Budget planner</h2>
         <div id="budget-summary" class="summary-cards"></div>
         <form id="budget-form" class="add-form">
-          <input type="text" id="budget-category" dir="auto" placeholder="Posten (z. B. Location) …" required>
-          <input type="number" id="budget-planned" min="0" step="0.01" placeholder="Geplant €" required>
-          <input type="number" id="budget-actual" min="0" step="0.01" placeholder="Tatsächlich €">
-          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+          <input type="text" id="budget-category" dir="auto" placeholder="Item (e.g. venue) …" required>
+          <input type="number" id="budget-planned" min="0" step="0.01" placeholder="Planned €" required>
+          <input type="number" id="budget-actual" min="0" step="0.01" placeholder="Actual €">
+          <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
         <div class="table-wrap">
           <table id="budget-table" class="budget-table hidden">
             <thead>
-              <tr><th>Posten</th><th>Geplant</th><th>Tatsächlich</th><th>Differenz</th><th></th></tr>
+              <tr><th>Item</th><th>Planned</th><th>Actual</th><th>Difference</th><th></th></tr>
             </thead>
             <tbody id="budget-body"></tbody>
             <tfoot id="budget-foot"></tfoot>
           </table>
         </div>
-        <p id="budget-empty" class="empty-hint">Noch keine Budget-Posten. 💐</p>
+        <p id="budget-empty" class="empty-hint">No budget items yet. 💐</p>
       </section>
 
-      <!-- ===== Countdown & Termine ===== -->
+      <!-- ===== Countdown & dates ===== -->
       <section id="tab-dates" class="tab-panel">
-        <h2>Countdown &amp; Termine</h2>
+        <h2>Countdown &amp; dates</h2>
         <div class="event-date-card">
-          <label for="event-date">💍 Unser Verlobungsdatum:</label>
+          <label for="event-date">💍 Our engagement date:</label>
           <input type="datetime-local" id="event-date">
         </div>
-        <h3>Wichtige Termine</h3>
+        <h3>Important dates</h3>
         <form id="date-form" class="add-form">
-          <input type="text" id="date-title" dir="auto" placeholder="Termin (z. B. Ringe anprobieren) …" required>
+          <input type="text" id="date-title" dir="auto" placeholder="Event (e.g. try on rings) …" required>
           <input type="date" id="date-when" required>
-          <button type="submit" class="btn btn-primary">+ Hinzufügen</button>
+          <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
         <ul id="date-list" class="item-list"></ul>
-        <p id="date-empty" class="empty-hint">Noch keine Termine geplant. 🗓️</p>
+        <p id="date-empty" class="empty-hint">No dates planned yet. 🗓️</p>
       </section>
 
-      <!-- ===== Notizen & Ideen ===== -->
+      <!-- ===== Notes & ideas ===== -->
       <section id="tab-notes" class="tab-panel">
-        <h2>Notizen &amp; Ideen</h2>
+        <h2>Notes &amp; ideas</h2>
         <form id="note-form" class="add-form add-form-column">
-          <input type="text" id="note-title" dir="auto" placeholder="Titel … / العنوان …" required>
-          <textarea id="note-text" dir="auto" rows="3" placeholder="Ideen, Links, Musikwünsche … / أفكار وملاحظات …"></textarea>
-          <button type="submit" class="btn btn-primary">+ Notiz speichern</button>
+          <input type="text" id="note-title" dir="auto" placeholder="Title … / العنوان …" required>
+          <textarea id="note-text" dir="auto" rows="3" placeholder="Ideas, links, song wishes … / أفكار وملاحظات …"></textarea>
+          <button type="submit" class="btn btn-primary">+ Save note</button>
         </form>
         <div id="note-list" class="note-grid"></div>
-        <p id="note-empty" class="empty-hint">Noch keine Notizen – haltet eure Ideen fest! ✨</p>
+        <p id="note-empty" class="empty-hint">No notes yet – capture your ideas! ✨</p>
       </section>
 
     </main>
 
     <footer class="footer">
-      Mit 💕 geplant · <span id="plan-code-label"></span>
+      Planned with 💕 · <span id="plan-code-label"></span>
     </footer>
   </div>
 

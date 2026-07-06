@@ -1,8 +1,9 @@
 # 💍 Verlobungs-Planer – Anleitung
 
 Ein gemeinsamer Planer für eure Verlobung: To-do-Liste, Gästeliste, Budget,
-Countdown mit Terminen und Notizen. Alles auf Deutsch, arabische Eingaben
-werden automatisch richtig (rechts nach links) dargestellt.
+Countdown mit Terminen und Notizen. Die Oberfläche ist auf **Englisch**,
+damit ihr sie beide versteht – arabische Eingaben werden automatisch
+richtig (rechts nach links) dargestellt.
 
 ## Sofort ausprobieren (ohne Einrichtung)
 
@@ -139,11 +140,11 @@ anderen **sofort** (Echtzeit-Synchronisation). ✨
 
 | Bereich | Was ihr dort macht |
 |---|---|
-| ✅ **Aufgaben** | To-dos mit Kategorie anlegen, abhaken, löschen – mit Fortschrittsbalken |
-| 👥 **Gäste** | Gäste mit Personenzahl erfassen; Status per Klick: offen → zugesagt → abgesagt |
+| ✅ **Tasks** | To-dos mit Kategorie anlegen, abhaken, löschen – mit Fortschrittsbalken |
+| 👥 **Guests** | Gäste mit Personenzahl erfassen; Status per Klick: open → confirmed → declined |
 | 💰 **Budget** | Posten mit geplanten und tatsächlichen Kosten; Summen und Differenz automatisch |
-| ⏳ **Termine** | Verlobungsdatum festlegen (startet den Countdown) + weitere wichtige Termine |
-| 📝 **Notizen** | Ideen, Links und Wünsche als Notizkarten festhalten |
+| ⏳ **Dates** | Verlobungsdatum festlegen (startet den Countdown) + weitere wichtige Termine |
+| 📝 **Notes** | Ideen, Links und Wünsche als Notizkarten festhalten |
 
 **Arabisch:** Ihr könnt in jedes Feld auch auf Arabisch schreiben – die
 Anzeige stellt sich automatisch auf Rechts-nach-links um (z. B. حفلة الخطوبة).

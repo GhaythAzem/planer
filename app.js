@@ -24,7 +24,7 @@ let applyingRemote = false;
 
 const $ = (id) => document.getElementById(id);
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-const euro = (n) => (Number(n) || 0).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
+const euro = (n) => (Number(n) || 0).toLocaleString('en-IE', { style: 'currency', currency: 'EUR' });
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -59,7 +59,7 @@ async function init() {
       return;
     } catch (err) {
       console.error('Firebase-Start fehlgeschlagen, nutze lokalen Modus:', err);
-      $('sync-status').textContent = '⚠️ Firebase-Fehler – lokaler Modus';
+      $('sync-status').textContent = '⚠️ Firebase error – local mode';
     }
   }
   initLocal();
@@ -72,8 +72,8 @@ function initLocal() {
     if (saved) state = { ...emptyState(), ...JSON.parse(saved) };
   } catch { /* beschädigte Daten ignorieren */ }
   $('local-banner').classList.remove('hidden');
-  $('sync-status').textContent = '💾 Nur lokal gespeichert';
-  $('plan-code-label').textContent = 'lokaler Modus';
+  $('sync-status').textContent = '💾 Stored in this browser only';
+  $('plan-code-label').textContent = 'local mode';
   startApp();
 }
 
@@ -100,7 +100,7 @@ async function initCloud(cfg) {
 
   saveDoc = (data) => setDoc(ref, data).catch((err) => {
     console.error('Speichern fehlgeschlagen:', err);
-    $('sync-status').textContent = '⚠️ Speichern fehlgeschlagen – Verbindung prüfen';
+    $('sync-status').textContent = '⚠️ Saving failed – check your connection';
   });
 
   onSnapshot(ref, (s) => {
@@ -110,12 +110,12 @@ async function initCloud(cfg) {
     state = { ...emptyState(), ...s.data() };
     renderAll();
     applyingRemote = false;
-    $('sync-status').textContent = '☁️ Synchronisiert – ihr seht beide dieselben Daten';
+    $('sync-status').textContent = '☁️ Synced – you both see the same data';
   });
 
   mode = 'cloud';
-  $('sync-status').textContent = '☁️ Verbunden';
-  $('plan-code-label').textContent = `Plan-Code: ${code}`;
+  $('sync-status').textContent = '☁️ Connected';
+  $('plan-code-label').textContent = `Plan code: ${code}`;
   startApp();
 }
 
@@ -237,16 +237,16 @@ function renderTodos() {
 
   const done = todos.filter((t) => t.done).length;
   $('todo-progress').style.width = todos.length ? `${(done / todos.length) * 100}%` : '0';
-  $('todo-progress-text').textContent = todos.length ? `${done} von ${todos.length} erledigt` : 'Noch keine Aufgaben';
+  $('todo-progress-text').textContent = todos.length ? `${done} of ${todos.length} done` : 'No tasks yet';
 
   for (const t of todos) {
     const li = document.createElement('li');
     li.className = t.done ? 'done' : '';
     li.innerHTML = `
-      <input type="checkbox" ${t.done ? 'checked' : ''} aria-label="erledigt">
+      <input type="checkbox" ${t.done ? 'checked' : ''} aria-label="done">
       <span class="item-text" dir="auto">${escapeHtml(t.text)}</span>
       ${t.category ? `<span class="chip">${escapeHtml(t.category)}</span>` : ''}
-      <button class="btn-icon" title="Löschen">🗑️</button>`;
+      <button class="btn-icon" title="Delete">🗑️</button>`;
     li.querySelector('input').addEventListener('change', () =>
       update((s) => { const x = s.todos.find((i) => i.id === t.id); if (x) x.done = !x.done; }));
     li.querySelector('.btn-icon').addEventListener('click', () =>
@@ -255,7 +255,7 @@ function renderTodos() {
   }
 }
 
-const GUEST_STATUS = { offen: '❔ offen', zugesagt: '✅ zugesagt', abgesagt: '❌ abgesagt' };
+const GUEST_STATUS = { offen: '❔ open', zugesagt: '✅ confirmed', abgesagt: '❌ declined' };
 const GUEST_NEXT = { offen: 'zugesagt', zugesagt: 'abgesagt', abgesagt: 'offen' };
 
 function renderGuests() {
@@ -268,17 +268,17 @@ function renderGuests() {
   const confirmed = guests.filter((g) => g.status === 'zugesagt')
     .reduce((n, g) => n + (Number(g.persons) || 1), 0);
   $('guest-summary').innerHTML = `
-    <div class="summary-card"><div class="num">${guests.length}</div><div class="lbl">Einladungen</div></div>
-    <div class="summary-card"><div class="num">${invited}</div><div class="lbl">Personen gesamt</div></div>
-    <div class="summary-card"><div class="num">${confirmed}</div><div class="lbl">Personen zugesagt</div></div>`;
+    <div class="summary-card"><div class="num">${guests.length}</div><div class="lbl">Invitations</div></div>
+    <div class="summary-card"><div class="num">${invited}</div><div class="lbl">Total people</div></div>
+    <div class="summary-card"><div class="num">${confirmed}</div><div class="lbl">People confirmed</div></div>`;
 
   for (const g of guests) {
     const li = document.createElement('li');
     li.innerHTML = `
       <span class="item-text" dir="auto">${escapeHtml(g.name)}</span>
-      <span class="chip chip-gold">${Number(g.persons) || 1} Pers.</span>
-      <button class="status-btn ${g.status}" title="Status ändern">${GUEST_STATUS[g.status] || g.status}</button>
-      <button class="btn-icon" title="Löschen">🗑️</button>`;
+      <span class="chip chip-gold">${Number(g.persons) || 1} ppl</span>
+      <button class="status-btn ${g.status}" title="Change status">${GUEST_STATUS[g.status] || g.status}</button>
+      <button class="btn-icon" title="Delete">🗑️</button>`;
     li.querySelector('.status-btn').addEventListener('click', () =>
       update((s) => { const x = s.guests.find((i) => i.id === g.id); if (x) x.status = GUEST_NEXT[x.status] || 'offen'; }));
     li.querySelector('.btn-icon').addEventListener('click', () =>
@@ -307,7 +307,7 @@ function renderBudget() {
       <td><input type="number" min="0" step="0.01" value="${Number(b.planned) || 0}" data-field="planned"></td>
       <td><input type="number" min="0" step="0.01" value="${Number(b.actual) || 0}" data-field="actual"></td>
       <td class="${diff > 0 ? 'diff-over' : diff < 0 ? 'diff-under' : ''}">${diff > 0 ? '+' : ''}${euro(diff)}</td>
-      <td><button class="btn-icon" title="Löschen">🗑️</button></td>`;
+      <td><button class="btn-icon" title="Delete">🗑️</button></td>`;
     tr.querySelectorAll('input').forEach((inp) => {
       inp.addEventListener('change', () =>
         update((s) => {
@@ -323,7 +323,7 @@ function renderBudget() {
   const totalDiff = totalActual - totalPlanned;
   $('budget-foot').innerHTML = items.length ? `
     <tr>
-      <td>Gesamt</td>
+      <td>Total</td>
       <td>${euro(totalPlanned)}</td>
       <td>${euro(totalActual)}</td>
       <td class="${totalDiff > 0 ? 'diff-over' : totalDiff < 0 ? 'diff-under' : ''}">${totalDiff > 0 ? '+' : ''}${euro(totalDiff)}</td>
@@ -331,11 +331,11 @@ function renderBudget() {
     </tr>` : '';
 
   $('budget-summary').innerHTML = `
-    <div class="summary-card"><div class="num">${euro(totalPlanned)}</div><div class="lbl">Geplant</div></div>
-    <div class="summary-card"><div class="num">${euro(totalActual)}</div><div class="lbl">Ausgegeben</div></div>
+    <div class="summary-card"><div class="num">${euro(totalPlanned)}</div><div class="lbl">Planned</div></div>
+    <div class="summary-card"><div class="num">${euro(totalActual)}</div><div class="lbl">Spent</div></div>
     <div class="summary-card ${totalDiff > 0 ? 'over' : 'under'}">
       <div class="num">${totalDiff > 0 ? '+' : ''}${euro(totalDiff)}</div>
-      <div class="lbl">${totalDiff > 0 ? 'über Plan' : 'unter Plan'}</div>
+      <div class="lbl">${totalDiff > 0 ? 'over budget' : 'under budget'}</div>
     </div>`;
 }
 
@@ -351,13 +351,13 @@ function renderDates() {
   for (const d of dates) {
     const li = document.createElement('li');
     li.className = d.date < today ? 'date-past' : '';
-    const nice = new Date(`${d.date}T00:00`).toLocaleDateString('de-DE', {
+    const nice = new Date(`${d.date}T00:00`).toLocaleDateString('en-GB', {
       weekday: 'short', day: '2-digit', month: 'long', year: 'numeric',
     });
     li.innerHTML = `
       <span class="date-when">📅 ${nice}</span>
       <span class="item-text" dir="auto">${escapeHtml(d.title)}</span>
-      <button class="btn-icon" title="Löschen">🗑️</button>`;
+      <button class="btn-icon" title="Delete">🗑️</button>`;
     li.querySelector('.btn-icon').addEventListener('click', () =>
       update((s) => { s.dates = s.dates.filter((i) => i.id !== d.id); }));
     list.appendChild(li);
@@ -375,7 +375,7 @@ function renderNotes() {
     card.innerHTML = `
       <h4 dir="auto">${escapeHtml(n.title)}</h4>
       <p dir="auto">${escapeHtml(n.text)}</p>
-      <div class="note-actions"><button class="btn-icon" title="Löschen">🗑️</button></div>`;
+      <div class="note-actions"><button class="btn-icon" title="Delete">🗑️</button></div>`;
     card.querySelector('.btn-icon').addEventListener('click', () =>
       update((s) => { s.notes = s.notes.filter((i) => i.id !== n.id); }));
     grid.appendChild(card);

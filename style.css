@@ -1,19 +1,19 @@
-/* ===== Verlobungs-Planer – romantisches Design (Rosé, Gold, Creme) ===== */
+/* ===== Engagement planner – modern beige design ===== */
 
 :root {
-  --cream: #fdf8f3;
-  --cream-dark: #f7ede4;
-  --rose: #e8b4bc;
-  --rose-light: #f6dde1;
-  --rose-dark: #c98695;
-  --gold: #b8933f;
-  --gold-light: #d9bc7a;
-  --text: #5a4a42;
-  --text-light: #957f74;
-  --white: #fffdfb;
+  --bg: #f5f1e9;
+  --bg-dark: #ece6d9;
+  --accent: #b09a76;
+  --accent-light: #e9e1d1;
+  --accent-dark: #8f7a56;
+  --gold: #9c7c4d;
+  --gold-light: #cfbd9c;
+  --text: #474034;
+  --text-light: #94897a;
+  --white: #fffdf9;
   --green: #7da87b;
   --red: #c96f6f;
-  --shadow: 0 4px 18px rgba(184, 147, 63, 0.12);
+  --shadow: 0 4px 18px rgba(143, 122, 86, 0.12);
   --radius: 14px;
 }
 
@@ -21,10 +21,10 @@
 
 body {
   font-family: 'Cairo', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
-  background: var(--cream);
+  background: var(--bg);
   background-image:
-    radial-gradient(circle at 10% 20%, rgba(232, 180, 188, 0.15) 0, transparent 30%),
-    radial-gradient(circle at 90% 80%, rgba(217, 188, 122, 0.12) 0, transparent 30%);
+    radial-gradient(circle at 10% 20%, rgba(176, 154, 118, 0.10) 0, transparent 30%),
+    radial-gradient(circle at 90% 80%, rgba(207, 189, 156, 0.12) 0, transparent 30%);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
@@ -33,26 +33,27 @@ body {
 .hidden { display: none !important; }
 
 .script-font {
-  font-family: 'Great Vibes', 'Amiri', cursive;
-  font-weight: 400;
+  font-family: 'Cormorant Garamond', 'Amiri', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 1px;
   color: var(--gold);
 }
 
-/* ===== Plan-Code Startbildschirm ===== */
+/* ===== Plan-code start screen ===== */
 .code-screen {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--cream);
+  background: var(--bg);
   padding: 20px;
   z-index: 100;
 }
 
 .code-card {
   background: var(--white);
-  border: 1px solid var(--rose-light);
+  border: 1px solid var(--accent-light);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   max-width: 440px;
@@ -62,28 +63,28 @@ body {
 }
 
 .code-ornament { font-size: 3rem; margin-bottom: 8px; }
-.code-card h1 { font-size: 2.6rem; margin-bottom: 12px; }
+.code-card h1 { font-size: 2.2rem; margin-bottom: 12px; }
 .code-card p { margin-bottom: 18px; color: var(--text-light); }
 
 .code-card input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid var(--rose-light);
+  border: 2px solid var(--accent-light);
   border-radius: var(--radius);
   font-size: 1.05rem;
   font-family: inherit;
   text-align: center;
   margin-bottom: 14px;
-  background: var(--cream);
+  background: var(--bg);
   color: var(--text);
 }
 
-.code-card input:focus { outline: none; border-color: var(--rose); }
+.code-card input:focus { outline: none; border-color: var(--accent); }
 .code-hint { font-size: 0.85rem; margin-top: 14px; }
 
-/* ===== Banner (localStorage-Modus) ===== */
+/* ===== Banner (localStorage mode) ===== */
 .banner {
-  background: #fff4e0;
+  background: #fdf6e3;
   border-bottom: 1px solid var(--gold-light);
   color: #7a5c1e;
   padding: 10px 16px;
@@ -91,17 +92,17 @@ body {
   font-size: 0.9rem;
 }
 
-/* ===== Header & Countdown ===== */
+/* ===== Header & countdown ===== */
 .header {
   text-align: center;
   padding: 34px 16px 24px;
-  background: linear-gradient(180deg, var(--rose-light) 0%, var(--cream) 100%);
-  border-bottom: 1px solid var(--rose-light);
+  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--accent-light);
 }
 
 .ornament { color: var(--gold-light); letter-spacing: 8px; font-size: 0.9rem; }
 
-.header h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); margin: 4px 0 10px; }
+.header h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 4px 0 10px; }
 
 .sync-status { font-size: 0.8rem; color: var(--text-light); margin-bottom: 12px; }
 
@@ -126,7 +127,7 @@ body {
   display: block;
   font-size: 1.9rem;
   font-weight: 700;
-  color: var(--rose-dark);
+  color: var(--accent-dark);
   font-variant-numeric: tabular-nums;
 }
 
@@ -138,7 +139,7 @@ body {
 }
 
 .countdown-hint { color: var(--text-light); font-size: 0.9rem; margin-top: 10px; }
-.countdown-done { color: var(--rose-dark); font-weight: 700; font-size: 1.2rem; margin-top: 10px; }
+.countdown-done { color: var(--accent-dark); font-weight: 700; font-size: 1.2rem; margin-top: 10px; }
 
 /* ===== Tabs ===== */
 .tabs {
@@ -149,14 +150,14 @@ body {
   padding: 14px 10px;
   position: sticky;
   top: 0;
-  background: rgba(253, 248, 243, 0.95);
+  background: rgba(245, 241, 233, 0.95);
   backdrop-filter: blur(6px);
   z-index: 10;
-  border-bottom: 1px solid var(--rose-light);
+  border-bottom: 1px solid var(--accent-light);
 }
 
 .tab {
-  border: 1px solid var(--rose-light);
+  border: 1px solid var(--accent-light);
   background: var(--white);
   color: var(--text);
   padding: 9px 16px;
@@ -167,11 +168,11 @@ body {
   transition: all 0.15s ease;
 }
 
-.tab:hover { border-color: var(--rose); }
+.tab:hover { border-color: var(--accent); }
 
 .tab.active {
-  background: var(--rose);
-  border-color: var(--rose);
+  background: var(--accent);
+  border-color: var(--accent);
   color: #fff;
   font-weight: 600;
 }
@@ -189,12 +190,12 @@ h2 {
   color: var(--gold);
   margin-bottom: 16px;
   padding-bottom: 6px;
-  border-bottom: 2px solid var(--rose-light);
+  border-bottom: 2px solid var(--accent-light);
 }
 
-h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
+h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 
-/* ===== Formulare ===== */
+/* ===== Forms ===== */
 .add-form {
   display: flex;
   gap: 8px;
@@ -215,7 +216,7 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .add-form textarea,
 .event-date-card input {
   padding: 10px 14px;
-  border: 2px solid var(--rose-light);
+  border: 2px solid var(--accent-light);
   border-radius: var(--radius);
   font-family: inherit;
   font-size: 0.95rem;
@@ -226,7 +227,7 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .add-form input:focus,
 .add-form select:focus,
 .add-form textarea:focus,
-.event-date-card input:focus { outline: none; border-color: var(--rose); }
+.event-date-card input:focus { outline: none; border-color: var(--accent); }
 
 .add-form input[type="number"] { width: 130px; }
 .add-form input[type="date"] { width: 170px; }
@@ -243,10 +244,10 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   transition: all 0.15s ease;
 }
 
-.btn-primary { background: var(--rose); color: #fff; }
-.btn-primary:hover { background: var(--rose-dark); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); }
 
-/* ===== Listen ===== */
+/* ===== Lists ===== */
 .item-list { list-style: none; }
 
 .item-list li {
@@ -254,7 +255,7 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   align-items: center;
   gap: 10px;
   background: var(--white);
-  border: 1px solid var(--rose-light);
+  border: 1px solid var(--accent-light);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 12px 14px;
@@ -275,21 +276,21 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .item-list input[type="checkbox"] {
   width: 20px;
   height: 20px;
-  accent-color: var(--rose-dark);
+  accent-color: var(--accent-dark);
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .chip {
   font-size: 0.75rem;
-  background: var(--rose-light);
-  color: var(--rose-dark);
+  background: var(--accent-light);
+  color: var(--accent-dark);
   border-radius: 999px;
   padding: 2px 10px;
   white-space: nowrap;
 }
 
-.chip-gold { background: #f3e8cf; color: var(--gold); }
+.chip-gold { background: #efe6d2; color: var(--gold); }
 
 .btn-icon {
   border: none;
@@ -302,11 +303,11 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   flex-shrink: 0;
 }
 
-.btn-icon:hover { background: var(--rose-light); color: var(--red); }
+.btn-icon:hover { background: var(--accent-light); color: var(--red); }
 
 .status-btn {
-  border: 1px solid var(--rose-light);
-  background: var(--cream);
+  border: 1px solid var(--accent-light);
+  background: var(--bg);
   border-radius: 999px;
   padding: 4px 12px;
   font-family: inherit;
@@ -318,13 +319,13 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .status-btn.zugesagt { background: #e4f0e2; border-color: var(--green); color: #4c7a4a; }
 .status-btn.abgesagt { background: #f7e2e2; border-color: var(--red); color: var(--red); }
 
-/* ===== Fortschritt ===== */
+/* ===== Progress ===== */
 .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 
 .progress-bar {
   flex: 1;
   height: 12px;
-  background: var(--rose-light);
+  background: var(--accent-light);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -332,14 +333,14 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .progress-fill {
   height: 100%;
   width: 0;
-  background: linear-gradient(90deg, var(--rose) 0%, var(--gold-light) 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--gold-light) 100%);
   border-radius: 999px;
   transition: width 0.3s ease;
 }
 
 .progress-text { font-size: 0.85rem; color: var(--text-light); white-space: nowrap; }
 
-/* ===== Zusammenfassungs-Karten ===== */
+/* ===== Summary cards ===== */
 .summary-cards {
   display: flex;
   gap: 10px;
@@ -357,12 +358,12 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   text-align: center;
 }
 
-.summary-card .num { font-size: 1.5rem; font-weight: 700; color: var(--rose-dark); }
+.summary-card .num { font-size: 1.5rem; font-weight: 700; color: var(--accent-dark); }
 .summary-card .lbl { font-size: 0.8rem; color: var(--text-light); }
 .summary-card.over .num { color: var(--red); }
 .summary-card.under .num { color: var(--green); }
 
-/* ===== Budget-Tabelle ===== */
+/* ===== Budget table ===== */
 .table-wrap { overflow-x: auto; }
 
 .budget-table {
@@ -377,15 +378,15 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .budget-table th, .budget-table td {
   padding: 10px 12px;
   text-align: left;
-  border-bottom: 1px solid var(--rose-light);
+  border-bottom: 1px solid var(--accent-light);
   white-space: nowrap;
 }
 
 .budget-table td:first-child { unicode-bidi: plaintext; white-space: normal; }
 
 .budget-table th {
-  background: var(--rose-light);
-  color: var(--rose-dark);
+  background: var(--accent-light);
+  color: var(--accent-dark);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -394,18 +395,18 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 .budget-table input[type="number"] {
   width: 110px;
   padding: 6px 8px;
-  border: 1px solid var(--rose-light);
+  border: 1px solid var(--accent-light);
   border-radius: 8px;
   font-family: inherit;
-  background: var(--cream);
+  background: var(--bg);
   color: var(--text);
 }
 
-.budget-table tfoot td { font-weight: 700; background: var(--cream-dark); }
+.budget-table tfoot td { font-weight: 700; background: var(--bg-dark); }
 .diff-over { color: var(--red); font-weight: 600; }
 .diff-under { color: var(--green); font-weight: 600; }
 
-/* ===== Termine ===== */
+/* ===== Dates ===== */
 .event-date-card {
   display: flex;
   align-items: center;
@@ -429,7 +430,7 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 
 .date-past { opacity: 0.55; }
 
-/* ===== Notizen ===== */
+/* ===== Notes ===== */
 .note-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -438,8 +439,8 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 
 .note-card {
   background: var(--white);
-  border: 1px solid var(--rose-light);
-  border-top: 4px solid var(--rose);
+  border: 1px solid var(--accent-light);
+  border-top: 4px solid var(--accent);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 14px 16px;
@@ -447,11 +448,11 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   flex-direction: column;
 }
 
-.note-card h4 { color: var(--rose-dark); margin-bottom: 6px; unicode-bidi: plaintext; }
+.note-card h4 { color: var(--accent-dark); margin-bottom: 6px; unicode-bidi: plaintext; }
 .note-card p { flex: 1; font-size: 0.92rem; white-space: pre-wrap; unicode-bidi: plaintext; overflow-wrap: anywhere; }
 .note-card .note-actions { text-align: right; margin-top: 8px; }
 
-/* ===== Sonstiges ===== */
+/* ===== Misc ===== */
 .empty-hint { text-align: center; color: var(--text-light); padding: 24px 10px; }
 
 .footer {
@@ -461,7 +462,7 @@ h3 { color: var(--rose-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   padding: 20px 10px 30px;
 }
 
-/* ===== Mobil ===== */
+/* ===== Mobile ===== */
 @media (max-width: 560px) {
   .add-form input[type="number"] { width: 90px; }
   .count-box { min-width: 64px; padding: 8px; }
