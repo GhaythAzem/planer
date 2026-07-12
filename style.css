@@ -665,6 +665,8 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 
 .theme-toggle:hover { transform: scale(1.08); }
 
+#share-btn { right: 64px; }
+
 /* ===== Mobile ===== */
 @media (max-width: 560px) {
   .add-form input[type="number"] { width: 90px; }

@@ -36,6 +36,26 @@ if (themeBtn) themeBtn.addEventListener('click', () => {
   applyTheme(currentTheme);
 });
 
+// ---------- Link teilen (WhatsApp & Co. am Handy, Kopieren am Desktop) ----------
+
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) shareBtn.addEventListener('click', async () => {
+  if (location.protocol === 'file:') {
+    alert('Sharing works once the planner is online (GitHub Pages). Open the https:// link and try again there.');
+    return;
+  }
+  const url = location.origin + location.pathname;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'Our Engagement Planner 💍', text: 'Our shared engagement planner', url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      shareBtn.textContent = '✓';
+      setTimeout(() => { shareBtn.textContent = '📤'; }, 2000);
+    }
+  } catch { /* Teilen abgebrochen – kein Fehler */ }
+});
+
 const emptyState = () => ({
   eventDate: '',
   todos: [],   // {id, text, done, assignee, due}

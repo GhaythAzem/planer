@@ -140,11 +140,16 @@ anderen **sofort** (Echtzeit-Synchronisation). ✨
 
 Der Planer ist für das Handy optimiert. Wenn die Seite über GitHub Pages
 läuft, könnt ihr sie beide auf den Startbildschirm legen – dann öffnet sie
-sich wie eine richtige App (mit eigenem Icon, ohne Browserleiste):
+sich wie eine richtige App (mit eigenem Icon 💍, ohne Browserleiste):
 
-- **iPhone (Safari):** Seite öffnen → Teilen-Symbol → **„Zum Home-Bildschirm“**
-- **Android (Chrome):** Seite öffnen → Menü ⋮ → **„App installieren“**
-  bzw. „Zum Startbildschirm hinzufügen“
+1. **Link teilen:** Tippe in der App oben rechts auf den **📤-Button** –
+   am Handy öffnet sich das Teilen-Menü (WhatsApp, Telegram …), am
+   Computer wird der Link kopiert. So schickst du Nour den Link in
+   Sekunden.
+2. **Auf den Startbildschirm legen** (macht ihr beide einmal):
+   - **iPhone (Safari):** Seite öffnen → Teilen-Symbol → **„Zum Home-Bildschirm“**
+   - **Android (Chrome):** Seite öffnen → Menü ⋮ → **„App installieren“**
+     bzw. „Zum Startbildschirm hinzufügen“
 
 ## Funktionen im Überblick
 
