@@ -53,7 +53,7 @@ let editingNoteId = null;   // Notiz, die gerade bearbeitet wird
 
 const $ = (id) => document.getElementById(id);
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-const euro = (n) => (Number(n) || 0).toLocaleString('en-IE', { style: 'currency', currency: 'EUR' });
+const money = (n) => (Number(n) || 0).toLocaleString('en', { style: 'currency', currency: 'ILS' });
 
 function escapeHtml(s) {
   return String(s ?? '')
@@ -328,7 +328,7 @@ function renderBudget() {
       <td dir="auto">${escapeHtml(b.category)}</td>
       <td><input type="number" min="0" step="0.01" value="${Number(b.planned) || 0}" data-field="planned"></td>
       <td><input type="number" min="0" step="0.01" value="${Number(b.actual) || 0}" data-field="actual"></td>
-      <td class="${diff > 0 ? 'diff-over' : diff < 0 ? 'diff-under' : ''}">${diff > 0 ? '+' : ''}${euro(diff)}</td>
+      <td class="${diff > 0 ? 'diff-over' : diff < 0 ? 'diff-under' : ''}">${diff > 0 ? '+' : ''}${money(diff)}</td>
       <td><button class="btn-icon" title="Delete">🗑️</button></td>`;
     tr.querySelectorAll('input').forEach((inp) => {
       inp.addEventListener('change', () =>
@@ -346,17 +346,17 @@ function renderBudget() {
   $('budget-foot').innerHTML = items.length ? `
     <tr>
       <td>Total</td>
-      <td>${euro(totalPlanned)}</td>
-      <td>${euro(totalActual)}</td>
-      <td class="${totalDiff > 0 ? 'diff-over' : totalDiff < 0 ? 'diff-under' : ''}">${totalDiff > 0 ? '+' : ''}${euro(totalDiff)}</td>
+      <td>${money(totalPlanned)}</td>
+      <td>${money(totalActual)}</td>
+      <td class="${totalDiff > 0 ? 'diff-over' : totalDiff < 0 ? 'diff-under' : ''}">${totalDiff > 0 ? '+' : ''}${money(totalDiff)}</td>
       <td></td>
     </tr>` : '';
 
   $('budget-summary').innerHTML = `
-    <div class="summary-card"><div class="num">${euro(totalPlanned)}</div><div class="lbl">Planned</div></div>
-    <div class="summary-card"><div class="num">${euro(totalActual)}</div><div class="lbl">Spent</div></div>
+    <div class="summary-card"><div class="num">${money(totalPlanned)}</div><div class="lbl">Planned</div></div>
+    <div class="summary-card"><div class="num">${money(totalActual)}</div><div class="lbl">Spent</div></div>
     <div class="summary-card ${totalDiff > 0 ? 'over' : 'under'}">
-      <div class="num">${totalDiff > 0 ? '+' : ''}${euro(totalDiff)}</div>
+      <div class="num">${totalDiff > 0 ? '+' : ''}${money(totalDiff)}</div>
       <div class="lbl">${totalDiff > 0 ? 'over budget' : 'under budget'}</div>
     </div>`;
 }
