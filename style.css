@@ -1,6 +1,7 @@
 /* ===== Engagement planner – modern beige design ===== */
 
 :root {
+  color-scheme: light dark;   /* native Elemente (Datumswähler etc.) folgen dem Modus */
   --bg: #f5f1e9;
   --bg-dark: #ece6d9;
   --accent: #b09a76;
@@ -300,6 +301,7 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 }
 
 .chip-gold { background: #efe6d2; color: var(--gold); }
+.chip-neutral { background: var(--bg-dark); color: var(--text-light); }
 
 .btn-icon {
   border: none;
@@ -314,19 +316,41 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 
 .btn-icon:hover { background: var(--accent-light); color: var(--red); }
 
-.status-btn {
+/* ===== Filter chips (tasks) ===== */
+.filter-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.filter-chip {
   border: 1px solid var(--accent-light);
-  background: var(--bg);
+  background: var(--white);
+  color: var(--text-light);
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   cursor: pointer;
+  min-height: 36px;
+}
+
+.filter-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.due-label {
+  font-size: 0.78rem;
+  color: var(--text-light);
   white-space: nowrap;
 }
 
-.status-btn.zugesagt { background: #e4f0e2; border-color: var(--green); color: #4c7a4a; }
-.status-btn.abgesagt { background: #f7e2e2; border-color: var(--red); color: var(--red); }
+.due-overdue { color: var(--red); font-weight: 700; }
+.item-list li.overdue { border-color: var(--red); }
 
 /* ===== Progress ===== */
 .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
@@ -430,14 +454,77 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   font-weight: 600;
 }
 
-.date-when {
-  font-size: 0.85rem;
-  color: var(--gold);
-  font-weight: 600;
-  white-space: nowrap;
+/* ===== Timeline ===== */
+.timeline {
+  position: relative;
+  margin: 6px 0 6px 8px;
+  padding-left: 26px;
 }
 
-.date-past { opacity: 0.55; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-light) 0%, var(--gold-light) 100%);
+  border-radius: 2px;
+}
+
+.tl-item { position: relative; padding: 4px 0 18px; }
+
+.tl-marker {
+  position: absolute;
+  left: -26px;
+  top: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
+.tl-milestone .tl-marker {
+  width: 30px;
+  height: 30px;
+  left: -30px;
+  top: 4px;
+  font-size: 1rem;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(156, 124, 77, 0.15);
+}
+
+.tl-milestone .tl-content {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, var(--white) 0%, var(--accent-light) 100%);
+}
+
+.tl-milestone .item-text { font-weight: 700; color: var(--gold); font-size: 1.05rem; }
+
+.tl-content {
+  background: var(--white);
+  border: 1px solid var(--accent-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px 14px;
+}
+
+.tl-date { font-size: 0.78rem; color: var(--text-light); margin-bottom: 2px; }
+.tl-rel { color: var(--gold); font-weight: 600; }
+
+.tl-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.tl-past { opacity: 0.6; }
+.tl-past .tl-marker { border-color: var(--text-light); color: var(--green); }
+.tl-done .item-text { text-decoration: line-through; color: var(--text-light); }
+.tl-done .tl-marker { color: var(--green); }
 
 /* ===== Notes ===== */
 .note-grid {
@@ -459,7 +546,30 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
 
 .note-card h4 { color: var(--accent-dark); margin-bottom: 6px; unicode-bidi: plaintext; }
 .note-card p { flex: 1; font-size: 0.92rem; white-space: pre-wrap; unicode-bidi: plaintext; overflow-wrap: anywhere; }
-.note-card .note-actions { text-align: right; margin-top: 8px; }
+.note-card .note-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.note-edit-title, .note-edit-text {
+  border: 2px solid var(--accent-light);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.note-edit-text { resize: vertical; flex: 1; }
+.note-edit-title:focus, .note-edit-text:focus { outline: none; border-color: var(--accent); }
+
+.btn-small { padding: 7px 14px; font-size: 0.85rem; }
+.btn-secondary { background: var(--bg-dark); color: var(--text); }
+.btn-secondary:hover { background: var(--accent-light); }
 
 /* ===== Misc ===== */
 .empty-hint { text-align: center; color: var(--text-light); padding: 24px 10px; }
@@ -469,6 +579,36 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   color: var(--text-light);
   font-size: 0.85rem;
   padding: 20px 10px 30px;
+}
+
+/* ===== Dark Mode (folgt der Systemeinstellung) ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #211d17;
+    --bg-dark: #2a251d;
+    --accent: #a08a66;
+    --accent-light: #3f382c;
+    --accent-dark: #cdb691;
+    --gold: #d3b57f;
+    --gold-light: #5a4c31;
+    --text: #eae3d5;
+    --text-light: #a89b86;
+    --white: #2c2721;
+    --green: #93bd90;
+    --red: #e08a8a;
+    --shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  }
+
+  .tabs { background: rgba(33, 29, 23, 0.95); }
+
+  .banner {
+    background: #3a3222;
+    border-bottom-color: var(--gold-light);
+    color: #e3cf9e;
+  }
+
+  .chip-gold { background: #4a3f2b; color: var(--gold); }
+  .tl-milestone .tl-marker { box-shadow: 0 0 0 4px rgba(211, 181, 127, 0.18); }
 }
 
 /* ===== Mobile ===== */

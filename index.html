@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Our Engagement 💍</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
-  <meta name="theme-color" content="#ece6d9">
+  <meta name="theme-color" content="#ece6d9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#221e18" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -59,7 +60,6 @@
 
     <nav class="tabs">
       <button class="tab active" data-tab="todos">✅ Tasks</button>
-      <button class="tab" data-tab="guests">👥 Guests</button>
       <button class="tab" data-tab="budget">💰 Budget</button>
       <button class="tab" data-tab="dates">⏳ Dates</button>
       <button class="tab" data-tab="notes">📝 Notes</button>
@@ -76,33 +76,23 @@
         </div>
         <form id="todo-form" class="add-form">
           <input type="text" id="todo-input" dir="auto" placeholder="New task … / مهمة جديدة …" required>
-          <select id="todo-category">
-            <option value="">General</option>
-            <option>Venue</option>
-            <option>Food &amp; Drinks</option>
-            <option>Decoration</option>
-            <option>Outfits</option>
-            <option>Music</option>
-            <option>Invitations</option>
-            <option>Photos</option>
+          <select id="todo-assignee" title="Who takes care of this?">
+            <option value="Ghayth">Ghayth</option>
+            <option value="Nour">Nour</option>
+            <option value="other">Other …</option>
           </select>
+          <input type="text" id="todo-assignee-name" dir="auto" placeholder="Name …" class="hidden">
+          <input type="date" id="todo-due" title="Due date (optional)">
           <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
+        <div id="todo-filter" class="filter-chips">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="Ghayth">Ghayth</button>
+          <button class="filter-chip" data-filter="Nour">Nour</button>
+          <button class="filter-chip" data-filter="other">Other</button>
+        </div>
         <ul id="todo-list" class="item-list"></ul>
         <p id="todo-empty" class="empty-hint">No tasks yet – add your first one! 🌸</p>
-      </section>
-
-      <!-- ===== Guest list ===== -->
-      <section id="tab-guests" class="tab-panel">
-        <h2>Guest list</h2>
-        <div id="guest-summary" class="summary-cards"></div>
-        <form id="guest-form" class="add-form">
-          <input type="text" id="guest-name" dir="auto" placeholder="Guest name … / اسم الضيف …" required>
-          <input type="number" id="guest-persons" min="1" max="99" value="1" title="Number of people">
-          <button type="submit" class="btn btn-primary">+ Add</button>
-        </form>
-        <ul id="guest-list" class="item-list"></ul>
-        <p id="guest-empty" class="empty-hint">No guests added yet. 💌</p>
       </section>
 
       <!-- ===== Budget ===== -->
@@ -134,14 +124,14 @@
           <label for="event-date">💍 Our engagement date:</label>
           <input type="datetime-local" id="event-date">
         </div>
-        <h3>Important dates</h3>
+        <h3>Our timeline</h3>
         <form id="date-form" class="add-form">
           <input type="text" id="date-title" dir="auto" placeholder="Event (e.g. try on rings) …" required>
           <input type="date" id="date-when" required>
           <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
-        <ul id="date-list" class="item-list"></ul>
-        <p id="date-empty" class="empty-hint">No dates planned yet. 🗓️</p>
+        <div id="timeline" class="timeline"></div>
+        <p id="date-empty" class="empty-hint">No events yet – add dates or give tasks a due date. 🗓️</p>
       </section>
 
       <!-- ===== Notes & ideas ===== -->

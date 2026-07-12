@@ -150,11 +150,13 @@ sich wie eine richtige App (mit eigenem Icon, ohne Browserleiste):
 
 | Bereich | Was ihr dort macht |
 |---|---|
-| ✅ **Tasks** | To-dos mit Kategorie anlegen, abhaken, löschen – mit Fortschrittsbalken |
-| 👥 **Guests** | Gäste mit Personenzahl erfassen; Status per Klick: open → confirmed → declined |
+| ✅ **Tasks** | To-dos anlegen mit Zuständigkeit (Ghayth / Nour / Other mit freiem Namen) und optionalem Fälligkeitsdatum; überfällige Aufgaben werden rot markiert. Filter-Chips zeigen, wer was zu tun hat. |
 | 💰 **Budget** | Posten mit geplanten und tatsächlichen Kosten; Summen und Differenz automatisch |
-| ⏳ **Dates** | Verlobungsdatum festlegen (startet den Countdown) + weitere wichtige Termine |
-| 📝 **Notes** | Ideen, Links und Wünsche als Notizkarten festhalten |
+| ⏳ **Dates** | Verlobungsdatum festlegen (startet den Countdown) + eine vertikale **Timeline** mit allen Terminen, fälligen Aufgaben und dem Verlobungstag als Meilenstein |
+| 📝 **Notes** | Ideen, Links und Wünsche als Notizkarten festhalten – nachträglich bearbeitbar (✏️) |
+
+**Dark Mode:** Die App folgt automatisch der Hell/Dunkel-Einstellung eures
+Handys – abends wird sie von selbst dunkel und augenschonend.
 
 **Arabisch:** Ihr könnt in jedes Feld auch auf Arabisch schreiben – die
 Anzeige stellt sich automatisch auf Rechts-nach-links um (z. B. حفلة الخطوبة).

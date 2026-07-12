@@ -9,8 +9,7 @@ const LS_CODE_KEY = 'verlobungsplaner-code';
 
 const emptyState = () => ({
   eventDate: '',
-  todos: [],   // {id, text, done, category}
-  guests: [],  // {id, name, persons, status: offen|zugesagt|abgesagt}
+  todos: [],   // {id, text, done, assignee, due}
   budget: [],  // {id, category, planned, actual}
   dates: [],   // {id, title, date}
   notes: [],   // {id, title, text, updatedAt}
@@ -21,6 +20,8 @@ let mode = 'local';          // 'local' | 'cloud'
 let saveDoc = null;          // im Cloud-Modus: Funktion zum Speichern
 let saveTimer = null;
 let applyingRemote = false;
+let todoFilter = 'all';     // all | Ghayth | Nour | other – nur lokal, nicht synchronisiert
+let editingNoteId = null;   // Notiz, die gerade bearbeitet wird
 
 const $ = (id) => document.getElementById(id);
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -158,24 +159,32 @@ function bindTabs() {
 // ---------- Formulare ----------
 
 function bindForms() {
+  // Bei „Other …“ ein Freitext-Feld für den Namen einblenden
+  $('todo-assignee').addEventListener('change', () => {
+    const other = $('todo-assignee').value === 'other';
+    $('todo-assignee-name').classList.toggle('hidden', !other);
+    if (other) $('todo-assignee-name').focus();
+  });
+
   $('todo-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const text = $('todo-input').value.trim();
     if (!text) return;
-    update((s) => s.todos.push({ id: uid(), text, done: false, category: $('todo-category').value }));
+    let assignee = $('todo-assignee').value;
+    if (assignee === 'other') assignee = $('todo-assignee-name').value.trim();
+    update((s) => s.todos.push({ id: uid(), text, done: false, assignee, due: $('todo-due').value }));
     $('todo-input').value = '';
+    $('todo-due').value = '';
     $('todo-input').focus();
   });
 
-  $('guest-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = $('guest-name').value.trim();
-    if (!name) return;
-    const persons = Math.max(1, parseInt($('guest-persons').value, 10) || 1);
-    update((s) => s.guests.push({ id: uid(), name, persons, status: 'offen' }));
-    $('guest-name').value = '';
-    $('guest-persons').value = '1';
-    $('guest-name').focus();
+  document.querySelectorAll('#todo-filter .filter-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      todoFilter = chip.dataset.filter;
+      document.querySelectorAll('#todo-filter .filter-chip').forEach((c) =>
+        c.classList.toggle('active', c === chip));
+      renderTodos();
+    });
   });
 
   $('budget-form').addEventListener('submit', (e) => {
@@ -222,9 +231,8 @@ function bindForms() {
 
 function renderAll() {
   renderTodos();
-  renderGuests();
   renderBudget();
-  renderDates();
+  renderTimeline();
   renderNotes();
   renderCountdown();
 }
@@ -233,19 +241,28 @@ function renderTodos() {
   const list = $('todo-list');
   list.innerHTML = '';
   const todos = state.todos;
-  $('todo-empty').classList.toggle('hidden', todos.length > 0);
 
   const done = todos.filter((t) => t.done).length;
   $('todo-progress').style.width = todos.length ? `${(done / todos.length) * 100}%` : '0';
   $('todo-progress-text').textContent = todos.length ? `${done} of ${todos.length} done` : 'No tasks yet';
 
-  for (const t of todos) {
+  const today = new Date().toISOString().slice(0, 10);
+  const visible = todos.filter((t) => {
+    if (todoFilter === 'all') return true;
+    if (todoFilter === 'other') return t.assignee !== 'Ghayth' && t.assignee !== 'Nour';
+    return t.assignee === todoFilter;
+  });
+
+  for (const t of visible) {
+    const overdue = !t.done && t.due && t.due < today;
     const li = document.createElement('li');
-    li.className = t.done ? 'done' : '';
+    li.className = (t.done ? 'done' : '') + (overdue ? ' overdue' : '');
+    const chipClass = t.assignee === 'Ghayth' ? 'chip chip-gold' : t.assignee === 'Nour' ? 'chip' : 'chip chip-neutral';
     li.innerHTML = `
       <input type="checkbox" ${t.done ? 'checked' : ''} aria-label="done">
       <span class="item-text" dir="auto">${escapeHtml(t.text)}</span>
-      ${t.category ? `<span class="chip">${escapeHtml(t.category)}</span>` : ''}
+      ${t.due ? `<span class="due-label${overdue ? ' due-overdue' : ''}">${overdue ? '⚠️ ' : '📅 '}${shortDate(t.due)}</span>` : ''}
+      ${t.assignee ? `<span class="${chipClass}" dir="auto">${escapeHtml(t.assignee)}</span>` : ''}
       <button class="btn-icon" title="Delete">🗑️</button>`;
     li.querySelector('input').addEventListener('change', () =>
       update((s) => { const x = s.todos.find((i) => i.id === t.id); if (x) x.done = !x.done; }));
@@ -253,38 +270,15 @@ function renderTodos() {
       update((s) => { s.todos = s.todos.filter((i) => i.id !== t.id); }));
     list.appendChild(li);
   }
+
+  $('todo-empty').textContent = todos.length
+    ? 'Nothing here for this filter.'
+    : 'No tasks yet – add your first one! 🌸';
+  $('todo-empty').classList.toggle('hidden', visible.length > 0);
 }
 
-const GUEST_STATUS = { offen: '❔ open', zugesagt: '✅ confirmed', abgesagt: '❌ declined' };
-const GUEST_NEXT = { offen: 'zugesagt', zugesagt: 'abgesagt', abgesagt: 'offen' };
-
-function renderGuests() {
-  const list = $('guest-list');
-  list.innerHTML = '';
-  const guests = state.guests;
-  $('guest-empty').classList.toggle('hidden', guests.length > 0);
-
-  const invited = guests.reduce((n, g) => n + (Number(g.persons) || 1), 0);
-  const confirmed = guests.filter((g) => g.status === 'zugesagt')
-    .reduce((n, g) => n + (Number(g.persons) || 1), 0);
-  $('guest-summary').innerHTML = `
-    <div class="summary-card"><div class="num">${guests.length}</div><div class="lbl">Invitations</div></div>
-    <div class="summary-card"><div class="num">${invited}</div><div class="lbl">Total people</div></div>
-    <div class="summary-card"><div class="num">${confirmed}</div><div class="lbl">People confirmed</div></div>`;
-
-  for (const g of guests) {
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span class="item-text" dir="auto">${escapeHtml(g.name)}</span>
-      <span class="chip chip-gold">${Number(g.persons) || 1} ppl</span>
-      <button class="status-btn ${g.status}" title="Change status">${GUEST_STATUS[g.status] || g.status}</button>
-      <button class="btn-icon" title="Delete">🗑️</button>`;
-    li.querySelector('.status-btn').addEventListener('click', () =>
-      update((s) => { const x = s.guests.find((i) => i.id === g.id); if (x) x.status = GUEST_NEXT[x.status] || 'offen'; }));
-    li.querySelector('.btn-icon').addEventListener('click', () =>
-      update((s) => { s.guests = s.guests.filter((i) => i.id !== g.id); }));
-    list.appendChild(li);
-  }
+function shortDate(iso) {
+  return new Date(`${iso}T00:00`).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 }
 
 function renderBudget() {
@@ -339,28 +333,58 @@ function renderBudget() {
     </div>`;
 }
 
-function renderDates() {
+function relativeDay(iso, today) {
+  const days = Math.round((new Date(`${iso}T00:00`) - new Date(`${today}T00:00`)) / 86400000);
+  if (days === 0) return 'today 💛';
+  if (days === 1) return 'tomorrow';
+  if (days === -1) return 'yesterday';
+  return days > 0 ? `in ${days} days` : `${-days} days ago`;
+}
+
+function renderTimeline() {
   if (document.activeElement !== $('event-date')) $('event-date').value = state.eventDate || '';
 
-  const list = $('date-list');
-  list.innerHTML = '';
-  const dates = [...state.dates].sort((a, b) => a.date.localeCompare(b.date));
-  $('date-empty').classList.toggle('hidden', dates.length > 0);
-
+  const box = $('timeline');
+  box.innerHTML = '';
   const today = new Date().toISOString().slice(0, 10);
-  for (const d of dates) {
-    const li = document.createElement('li');
-    li.className = d.date < today ? 'date-past' : '';
-    const nice = new Date(`${d.date}T00:00`).toLocaleDateString('en-GB', {
-      weekday: 'short', day: '2-digit', month: 'long', year: 'numeric',
+
+  // Termine + Aufgaben mit Fälligkeit + Verlobungstag zu einer Zeitleiste mischen
+  const entries = [
+    ...state.dates.map((d) => ({ kind: 'event', id: d.id, date: d.date, title: d.title })),
+    ...state.todos.filter((t) => t.due).map((t) => ({
+      kind: 'task', id: t.id, date: t.due, title: t.text, done: t.done, assignee: t.assignee,
+    })),
+  ];
+  if (state.eventDate) {
+    entries.push({ kind: 'milestone', date: state.eventDate.slice(0, 10), title: 'Our engagement!' });
+  }
+  entries.sort((a, b) => a.date.localeCompare(b.date));
+  $('date-empty').classList.toggle('hidden', entries.length > 0);
+
+  for (const e of entries) {
+    const past = e.date < today;
+    const item = document.createElement('div');
+    item.className = `tl-item tl-${e.kind}${past ? ' tl-past' : ''}${e.done ? ' tl-done' : ''}`;
+    const nice = new Date(`${e.date}T00:00`).toLocaleDateString('en-GB', {
+      weekday: 'short', day: '2-digit', month: 'short', year: 'numeric',
     });
-    li.innerHTML = `
-      <span class="date-when">📅 ${nice}</span>
-      <span class="item-text" dir="auto">${escapeHtml(d.title)}</span>
-      <button class="btn-icon" title="Delete">🗑️</button>`;
-    li.querySelector('.btn-icon').addEventListener('click', () =>
-      update((s) => { s.dates = s.dates.filter((i) => i.id !== d.id); }));
-    list.appendChild(li);
+    const marker = e.kind === 'milestone' ? '💍' : (past || e.done) ? '✓' : '';
+    const overdueTask = e.kind === 'task' && past && !e.done;
+    item.innerHTML = `
+      <div class="tl-marker">${marker}</div>
+      <div class="tl-content">
+        <div class="tl-date">${nice} · <span class="tl-rel${overdueTask ? ' due-overdue' : ''}">${overdueTask ? '⚠️ overdue' : relativeDay(e.date, today)}</span></div>
+        <div class="tl-title">
+          <span class="item-text" dir="auto">${escapeHtml(e.title)}</span>
+          ${e.kind === 'task' ? `<span class="chip chip-neutral">task${e.assignee ? ` · ${escapeHtml(e.assignee)}` : ''}</span>` : ''}
+          ${e.kind === 'event' ? '<button class="btn-icon" title="Delete">🗑️</button>' : ''}
+        </div>
+      </div>`;
+    if (e.kind === 'event') {
+      item.querySelector('.btn-icon').addEventListener('click', () =>
+        update((s) => { s.dates = s.dates.filter((i) => i.id !== e.id); }));
+    }
+    box.appendChild(item);
   }
 }
 
@@ -372,11 +396,47 @@ function renderNotes() {
   for (const n of state.notes) {
     const card = document.createElement('div');
     card.className = 'note-card';
+
+    if (editingNoteId === n.id) {
+      // Bearbeitungsmodus: Titel + Text direkt in der Karte ändern
+      card.innerHTML = `
+        <input type="text" class="note-edit-title" dir="auto" value="${escapeHtml(n.title)}">
+        <textarea class="note-edit-text" dir="auto" rows="4">${escapeHtml(n.text)}</textarea>
+        <div class="note-actions">
+          <button class="btn btn-small btn-secondary" data-act="cancel">Cancel</button>
+          <button class="btn btn-small btn-primary" data-act="save">Save</button>
+        </div>`;
+      card.querySelector('[data-act=save]').addEventListener('click', () => {
+        const title = card.querySelector('.note-edit-title').value.trim();
+        const text = card.querySelector('.note-edit-text').value.trim();
+        if (!title) return;
+        editingNoteId = null;
+        update((s) => {
+          const x = s.notes.find((i) => i.id === n.id);
+          if (x) { x.title = title; x.text = text; x.updatedAt = new Date().toISOString(); }
+        });
+      });
+      card.querySelector('[data-act=cancel]').addEventListener('click', () => {
+        editingNoteId = null;
+        renderNotes();
+      });
+      grid.appendChild(card);
+      card.querySelector('.note-edit-title').focus();
+      continue;
+    }
+
     card.innerHTML = `
       <h4 dir="auto">${escapeHtml(n.title)}</h4>
       <p dir="auto">${escapeHtml(n.text)}</p>
-      <div class="note-actions"><button class="btn-icon" title="Delete">🗑️</button></div>`;
-    card.querySelector('.btn-icon').addEventListener('click', () =>
+      <div class="note-actions">
+        <button class="btn-icon" data-act="edit" title="Edit">✏️</button>
+        <button class="btn-icon" data-act="delete" title="Delete">🗑️</button>
+      </div>`;
+    card.querySelector('[data-act=edit]').addEventListener('click', () => {
+      editingNoteId = n.id;
+      renderNotes();
+    });
+    card.querySelector('[data-act=delete]').addEventListener('click', () =>
       update((s) => { s.notes = s.notes.filter((i) => i.id !== n.id); }));
     grid.appendChild(card);
   }
