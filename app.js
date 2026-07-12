@@ -29,7 +29,8 @@ let currentTheme = localStorage.getItem(LS_THEME_KEY) || 'auto';
 if (!THEME_NEXT[currentTheme]) currentTheme = 'auto';
 applyTheme(currentTheme);
 
-document.getElementById('theme-toggle').addEventListener('click', () => {
+const themeBtn = document.getElementById('theme-toggle');
+if (themeBtn) themeBtn.addEventListener('click', () => {
   currentTheme = THEME_NEXT[currentTheme];
   localStorage.setItem(LS_THEME_KEY, currentTheme);
   applyTheme(currentTheme);
@@ -52,6 +53,8 @@ let todoFilter = 'all';     // all | Ghayth | Nour | other – nur lokal, nicht 
 let editingNoteId = null;   // Notiz, die gerade bearbeitet wird
 
 const $ = (id) => document.getElementById(id);
+// Liest ein Feld, das es in einer noch gecachten alten index.html evtl. nicht gibt
+const optVal = (id) => { const el = $(id); return el ? el.value : ''; };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const money = (n) => (Number(n) || 0).toLocaleString('en', { style: 'currency', currency: 'ILS' });
 
@@ -188,21 +191,25 @@ function bindTabs() {
 
 function bindForms() {
   // Bei „Other …“ ein Freitext-Feld für den Namen einblenden
-  $('todo-assignee').addEventListener('change', () => {
-    const other = $('todo-assignee').value === 'other';
-    $('todo-assignee-name').classList.toggle('hidden', !other);
-    if (other) $('todo-assignee-name').focus();
+  const assigneeSel = $('todo-assignee');
+  if (assigneeSel) assigneeSel.addEventListener('change', () => {
+    const other = assigneeSel.value === 'other';
+    const nameEl = $('todo-assignee-name');
+    if (nameEl) {
+      nameEl.classList.toggle('hidden', !other);
+      if (other) nameEl.focus();
+    }
   });
 
   $('todo-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const text = $('todo-input').value.trim();
     if (!text) return;
-    let assignee = $('todo-assignee').value;
-    if (assignee === 'other') assignee = $('todo-assignee-name').value.trim();
-    update((s) => s.todos.push({ id: uid(), text, done: false, assignee, due: $('todo-due').value }));
+    let assignee = optVal('todo-assignee');
+    if (assignee === 'other') assignee = optVal('todo-assignee-name').trim();
+    update((s) => s.todos.push({ id: uid(), text, done: false, assignee, due: optVal('todo-due') }));
     $('todo-input').value = '';
-    $('todo-due').value = '';
+    if ($('todo-due')) $('todo-due').value = '';
     $('todo-input').focus();
   });
 
@@ -224,7 +231,7 @@ function bindForms() {
       category,
       planned: Number($('budget-planned').value) || 0,
       actual: Number($('budget-actual').value) || 0,
-      paid: Number($('budget-paid').value) || 0,
+      paid: Number(optVal('budget-paid')) || 0,
     }));
     $('budget-form').reset();
     $('budget-category').focus();
