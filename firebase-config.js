@@ -1,22 +1,8 @@
-// ============================================================
-//  Firebase-Zugangsdaten
-//
-//  Solange hier nichts eingetragen ist, speichert der Planer
-//  die Daten nur lokal im Browser (localStorage).
-//
-//  Für gemeinsamen Zugriff mit Echtzeit-Synchronisation:
-//  Folge der Schritt-für-Schritt-Anleitung in ANLEITUNG.md
-//  und ersetze dann `null` durch deine Firebase-Konfiguration,
-//  zum Beispiel:
-//
-//  window.FIREBASE_CONFIG = {
-//    apiKey: "AIza...",
-//    authDomain: "dein-projekt.firebaseapp.com",
-//    projectId: "dein-projekt",
-//    storageBucket: "dein-projekt.appspot.com",
-//    messagingSenderId: "123456789",
-//    appId: "1:123456789:web:abc123"
-//  };
-// ============================================================
-
-window.FIREBASE_CONFIG = null;
+window.FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAyz5BBJKyI2WHI2pf3QJzQuM9aJs4sjfg",
+  authDomain: "verlobungs-planer.firebaseapp.com",
+  projectId: "verlobungs-planer",
+  storageBucket: "verlobungs-planer.firebasestorage.app",
+  messagingSenderId: "1009660419414",
+  appId: "1:1009660419414:web:4456e6cef00651ba994af7"
+};
