@@ -104,6 +104,7 @@ body {
 
 /* ===== Header & countdown ===== */
 .header {
+  position: relative;
   text-align: center;
   padding: 34px 16px 24px;
   background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg) 100%);
@@ -581,9 +582,14 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
   padding: 20px 10px 30px;
 }
 
-/* ===== Dark Mode (folgt der Systemeinstellung) ===== */
+/* ===== Dark Mode =====
+   Greift in zwei Fällen:
+   1. System steht auf Dunkel UND der Nutzer hat nicht „Hell“ erzwungen (Auto)
+   2. Der Nutzer hat über den 🌙-Button „Dunkel“ erzwungen (data-theme="dark")
+   Die beiden Blöcke müssen inhaltlich identisch bleiben. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #211d17;
     --bg-dark: #2a251d;
     --accent: #a08a66;
@@ -599,17 +605,65 @@ h3 { color: var(--accent-dark); margin: 22px 0 10px; font-size: 1.1rem; }
     --shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
   }
 
-  .tabs { background: rgba(33, 29, 23, 0.95); }
+  :root:not([data-theme="light"]) .tabs { background: rgba(33, 29, 23, 0.95); }
 
-  .banner {
+  :root:not([data-theme="light"]) .banner {
     background: #3a3222;
     border-bottom-color: var(--gold-light);
     color: #e3cf9e;
   }
 
-  .chip-gold { background: #4a3f2b; color: var(--gold); }
-  .tl-milestone .tl-marker { box-shadow: 0 0 0 4px rgba(211, 181, 127, 0.18); }
+  :root:not([data-theme="light"]) .chip-gold { background: #4a3f2b; color: var(--gold); }
+  :root:not([data-theme="light"]) .tl-milestone .tl-marker { box-shadow: 0 0 0 4px rgba(211, 181, 127, 0.18); }
 }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #211d17;
+  --bg-dark: #2a251d;
+  --accent: #a08a66;
+  --accent-light: #3f382c;
+  --accent-dark: #cdb691;
+  --gold: #d3b57f;
+  --gold-light: #5a4c31;
+  --text: #eae3d5;
+  --text-light: #a89b86;
+  --white: #2c2721;
+  --green: #93bd90;
+  --red: #e08a8a;
+  --shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .tabs { background: rgba(33, 29, 23, 0.95); }
+
+:root[data-theme="dark"] .banner {
+  background: #3a3222;
+  border-bottom-color: var(--gold-light);
+  color: #e3cf9e;
+}
+
+:root[data-theme="dark"] .chip-gold { background: #4a3f2b; color: var(--gold); }
+:root[data-theme="dark"] .tl-milestone .tl-marker { box-shadow: 0 0 0 4px rgba(211, 181, 127, 0.18); }
+
+:root[data-theme="light"] { color-scheme: light; }
+
+/* ===== Theme-Umschalter ===== */
+.theme-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--accent-light);
+  background: var(--white);
+  border-radius: 999px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease;
+}
+
+.theme-toggle:hover { transform: scale(1.08); }
 
 /* ===== Mobile ===== */
 @media (max-width: 560px) {

@@ -6,6 +6,34 @@
 
 const LS_DATA_KEY = 'verlobungsplaner-data';
 const LS_CODE_KEY = 'verlobungsplaner-code';
+const LS_THEME_KEY = 'verlobungsplaner-theme';
+
+// ---------- Theme (Auto / Dunkel / Hell) ----------
+// Pro Gerät gespeichert, bewusst nicht synchronisiert.
+
+const THEME_ICON = { auto: '🌗', dark: '🌙', light: '☀️' };
+const THEME_LABEL = { auto: 'Auto', dark: 'Dark', light: 'Light' };
+const THEME_NEXT = { auto: 'dark', dark: 'light', light: 'auto' };
+
+function applyTheme(theme) {
+  if (theme === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.textContent = THEME_ICON[theme];
+    btn.title = `Theme: ${THEME_LABEL[theme]}`;
+  }
+}
+
+let currentTheme = localStorage.getItem(LS_THEME_KEY) || 'auto';
+if (!THEME_NEXT[currentTheme]) currentTheme = 'auto';
+applyTheme(currentTheme);
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  currentTheme = THEME_NEXT[currentTheme];
+  localStorage.setItem(LS_THEME_KEY, currentTheme);
+  applyTheme(currentTheme);
+});
 
 const emptyState = () => ({
   eventDate: '',
