@@ -15,7 +15,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Cairo:wght@400;600;700&family=Amiri&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <!-- ?v=… sorgt dafür, dass Browser nach Updates nicht die alte Datei aus dem Cache laden.
+       Bei Änderungen an style.css/app.js die Nummer hier hochzählen! -->
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -104,12 +106,13 @@
           <input type="text" id="budget-category" dir="auto" placeholder="Item (e.g. venue) …" required>
           <input type="number" id="budget-planned" min="0" step="0.01" placeholder="Planned ₪" required>
           <input type="number" id="budget-actual" min="0" step="0.01" placeholder="Actual ₪">
+          <input type="number" id="budget-paid" min="0" step="0.01" placeholder="Paid so far ₪">
           <button type="submit" class="btn btn-primary">+ Add</button>
         </form>
         <div class="table-wrap">
           <table id="budget-table" class="budget-table hidden">
             <thead>
-              <tr><th>Item</th><th>Planned</th><th>Actual</th><th>Difference</th><th></th></tr>
+              <tr><th>Item</th><th>Planned</th><th>Actual</th><th>Paid</th><th>Still to pay</th><th></th></tr>
             </thead>
             <tbody id="budget-body"></tbody>
             <tfoot id="budget-foot"></tfoot>
@@ -158,6 +161,6 @@
   <!-- Bewusst KEIN type="module": Module werden beim direkten Öffnen
        per file:// vom Browser blockiert. Firebase wird bei Bedarf per
        dynamischem import() geladen, das auch hier funktioniert. -->
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>

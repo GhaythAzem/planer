@@ -224,6 +224,7 @@ function bindForms() {
       category,
       planned: Number($('budget-planned').value) || 0,
       actual: Number($('budget-actual').value) || 0,
+      paid: Number($('budget-paid').value) || 0,
     }));
     $('budget-form').reset();
     $('budget-category').focus();
@@ -318,17 +319,27 @@ function renderBudget() {
 
   let totalPlanned = 0;
   let totalActual = 0;
+  let totalPaid = 0;
+  let totalLeft = 0;
 
   for (const b of items) {
-    totalPlanned += Number(b.planned) || 0;
-    totalActual += Number(b.actual) || 0;
-    const diff = (Number(b.actual) || 0) - (Number(b.planned) || 0);
+    const planned = Number(b.planned) || 0;
+    const actual = Number(b.actual) || 0;
+    const paid = Number(b.paid) || 0;
+    // Offen = tatsächlicher Preis (falls bekannt, sonst geplant) minus bereits bezahlt
+    const left = (actual || planned) - paid;
+    totalPlanned += planned;
+    totalActual += actual;
+    totalPaid += paid;
+    totalLeft += left;
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td dir="auto">${escapeHtml(b.category)}</td>
-      <td><input type="number" min="0" step="0.01" value="${Number(b.planned) || 0}" data-field="planned"></td>
-      <td><input type="number" min="0" step="0.01" value="${Number(b.actual) || 0}" data-field="actual"></td>
-      <td class="${diff > 0 ? 'diff-over' : diff < 0 ? 'diff-under' : ''}">${diff > 0 ? '+' : ''}${money(diff)}</td>
+      <td><input type="number" min="0" step="0.01" value="${planned}" data-field="planned"></td>
+      <td><input type="number" min="0" step="0.01" value="${actual}" data-field="actual"></td>
+      <td><input type="number" min="0" step="0.01" value="${paid}" data-field="paid"></td>
+      <td class="${left > 0 ? 'diff-over' : 'diff-under'}">${left > 0 ? money(left) : '✓ paid'}</td>
       <td><button class="btn-icon" title="Delete">🗑️</button></td>`;
     tr.querySelectorAll('input').forEach((inp) => {
       inp.addEventListener('change', () =>
@@ -342,22 +353,27 @@ function renderBudget() {
     body.appendChild(tr);
   }
 
-  const totalDiff = totalActual - totalPlanned;
   $('budget-foot').innerHTML = items.length ? `
     <tr>
       <td>Total</td>
       <td>${money(totalPlanned)}</td>
       <td>${money(totalActual)}</td>
-      <td class="${totalDiff > 0 ? 'diff-over' : totalDiff < 0 ? 'diff-under' : ''}">${totalDiff > 0 ? '+' : ''}${money(totalDiff)}</td>
+      <td>${money(totalPaid)}</td>
+      <td class="${totalLeft > 0 ? 'diff-over' : 'diff-under'}">${totalLeft > 0 ? money(totalLeft) : '✓ all paid'}</td>
       <td></td>
     </tr>` : '';
 
+  const totalDiff = totalActual - totalPlanned;
   $('budget-summary').innerHTML = `
     <div class="summary-card"><div class="num">${money(totalPlanned)}</div><div class="lbl">Planned</div></div>
-    <div class="summary-card"><div class="num">${money(totalActual)}</div><div class="lbl">Spent</div></div>
     <div class="summary-card ${totalDiff > 0 ? 'over' : 'under'}">
-      <div class="num">${totalDiff > 0 ? '+' : ''}${money(totalDiff)}</div>
-      <div class="lbl">${totalDiff > 0 ? 'over budget' : 'under budget'}</div>
+      <div class="num">${money(totalActual)}</div>
+      <div class="lbl">${totalDiff > 0 ? `Spent · ${money(totalDiff)} over plan` : 'Spent'}</div>
+    </div>
+    <div class="summary-card"><div class="num">${money(totalPaid)}</div><div class="lbl">Paid so far</div></div>
+    <div class="summary-card ${totalLeft > 0 ? 'over' : 'under'}">
+      <div class="num">${totalLeft > 0 ? money(totalLeft) : '✓'}</div>
+      <div class="lbl">${totalLeft > 0 ? 'Still to pay' : 'All paid'}</div>
     </div>`;
 }
 
